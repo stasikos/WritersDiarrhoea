@@ -23,7 +23,6 @@
 package name.stasikos.diarrhoea;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -34,7 +33,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
 
 /**
  *
@@ -265,10 +263,17 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         if (!targetReached) {
             textArea.setEditable(false);
             textArea.setCopyPaste(false);
+            // If user failed to reach target word count, clean up text area.
+            try {
+                textArea.getDocument().remove(0, textArea.getDocument().getLength());
+            } catch (BadLocationException ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            textArea.getDocument().removeDocumentListener(this);
+            btStart.setEnabled(true);
+            btSave.setEnabled(true);
         }
-        textArea.getDocument().removeDocumentListener(this);
-        btStart.setEnabled(true);
-        btSave.setEnabled(true);
     }
 
     public void insertUpdate(DocumentEvent e) {

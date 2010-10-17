@@ -43,7 +43,7 @@ public class WriterTimer implements Runnable {
                     if (time == 0) {
                         stop();
                         object.deadLineReached();
-//                        Thread.currentThread().interrupt();
+                        Thread.currentThread().interrupt();
                     }
                     time--;
                 }
