@@ -22,19 +22,15 @@
  */
 package name.stasikos.diarrhoea;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
 
 /**
  *
@@ -49,7 +45,6 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
     private boolean targetReached = false;
     private int currentCount = 0;
     private Thread timerThread;
-    private SecureTextArea textArea;
 
     /** Creates new form MainForm */
     public MainForm() {
@@ -57,13 +52,6 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         targetWords = prefs.getInt("targetWords", 50);
         targetTime = prefs.getInt("targetTime", 5);
         initComponents();
-        textArea = new SecureTextArea();
-        textArea.setEditable(false);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setRows(15);
-        mainPanel.add(new JScrollPane(textArea), BorderLayout.CENTER);
-        this.pack();
     }
 
     /** This method is called from within the constructor to
@@ -76,6 +64,8 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        textArea = new javax.swing.JTextArea();
         toolBar = new javax.swing.JToolBar();
         btTargets = new javax.swing.JButton();
         btStart = new javax.swing.JButton();
@@ -98,6 +88,32 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
 
         mainPanel.setName("mainPanel"); // NOI18N
         mainPanel.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        textArea.setColumns(20);
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setRows(10);
+        textArea.setWrapStyleWord(true);
+        textArea.setAutoscrolls(true);
+        textArea.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        textArea.setFocusCycleRoot(true);
+        textArea.setName("textArea"); // NOI18N
+        textArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                textAreaMouseReleased(evt);
+            }
+        });
+        textArea.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                textAreaMouseMoved(evt);
+            }
+        });
+        jScrollPane1.setViewportView(textArea);
+
+        mainPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
         getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
 
         toolBar.setFloatable(false);
@@ -207,7 +223,6 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
             // Warn user about document
         }
         textArea.setEditable(true);
-        textArea.setCopyPasteDisabled(true);
         textArea.getDocument().addDocumentListener(this);
         btStart.setEnabled(false);
         btSave.setEnabled(false);
@@ -217,9 +232,20 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         timer.start();
         progressBar.getModel().setMaximum(targetTime * 60);
         progressBar.getModel().setValue(0);
-        textArea.setCaret(new DisabledCaret());
         textArea.requestFocusInWindow();
     }//GEN-LAST:event_btStartActionPerformed
+
+    private void textAreaMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textAreaMouseMoved
+        if (!targetReached) {
+            textArea.setSelectionEnd(textArea.getSelectionStart());
+        }
+    }//GEN-LAST:event_textAreaMouseMoved
+
+    private void textAreaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textAreaMouseReleased
+        if (!targetReached) {
+            textArea.setSelectionEnd(textArea.getSelectionStart());
+        }
+    }//GEN-LAST:event_textAreaMouseReleased
 
     /**
      * @param args the command line arguments
@@ -252,6 +278,7 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbCurrCount;
     private javax.swing.JLabel lbTargetCount;
     private javax.swing.JLabel lbTimeLeft;
@@ -259,16 +286,15 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
     private javax.swing.JPanel mainPanel;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JPanel statusBar;
+    private javax.swing.JTextArea textArea;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 
     public void deadLineReached() {
         if (!targetReached) {
             textArea.setEditable(false);
-            textArea.setCopyPasteDisabled(false);
         }
         textArea.getDocument().removeDocumentListener(this);
-        textArea.setCaret(new DefaultCaret());
         btStart.setEnabled(true);
         btSave.setEnabled(true);
     }
@@ -291,14 +317,12 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
             currentCount = doc.split("\\W+").length;
             lbCurrCount.setText(Integer.toString(currentCount));
             lbWordRamaining.setText(Integer.toString(targetWords - currentCount));
-            if (targetWords - currentCount <= 0) {
+            if (targetWords - currentCount < 0) {
                 btSave.setEnabled(true);
                 targetReached = true;
-                textArea.setCaret(new DefaultCaret());
             } else {
                 btSave.setEnabled(false);
                 targetReached = false;
-                textArea.setCaret(new DisabledCaret());
             }
         } catch (BadLocationException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -317,4 +341,6 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         });
 
     }
+
+    
 }
