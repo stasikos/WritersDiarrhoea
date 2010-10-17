@@ -133,6 +133,7 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         toolBar.add(btStart);
 
         btSave.setText("Save");
+        btSave.setEnabled(false);
         btSave.setFocusable(false);
         btSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btSave.setName("btSave"); // NOI18N
