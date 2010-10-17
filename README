@@ -1,0 +1,11 @@
+This is an clone of Write Attack application (http://code.google.com/p/write-attack/).
+It is created because of:
+1. Write Attack is open-source, it is Qt App, but it is has no builds for Linux.
+2. It not works good under wine.
+3. Looks like no one develops it.
+4. I want to improve my Java GUI experience.
+
+
+Source code is supposed to be built with NetBeans & Oracle JRE 6, but you also can use Ant.
+It not requires any additional libs.
+
