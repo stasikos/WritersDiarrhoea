@@ -23,9 +23,15 @@
 package name.stasikos.diarrhoea;
 
 import java.awt.BorderLayout;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -131,6 +137,11 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         btSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btSave.setName("btSave"); // NOI18N
         btSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
         toolBar.add(btSave);
 
         getContentPane().add(toolBar, java.awt.BorderLayout.NORTH);
@@ -217,6 +228,27 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         progressBar.getModel().setValue(0);
         textArea.requestFocusInWindow();
     }//GEN-LAST:event_btStartActionPerformed
+
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
+        JFileChooser fc = new JFileChooser();
+        int result = fc.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            BufferedWriter writer = null;
+            try {
+                File file = fc.getSelectedFile();
+                writer = new BufferedWriter(new FileWriter(file));
+                textArea.write(writer);
+            } catch (IOException ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    writer.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btSaveActionPerformed
 
     /**
      * @param args the command line arguments
