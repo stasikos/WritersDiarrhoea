@@ -24,47 +24,54 @@ import javax.swing.JTextArea;
  */
 public class SecureTextArea extends JTextArea {
 
-    private boolean copyPasteDisabled = false;
+    DisabledCaret scaret = new DisabledCaret();
 
-    public boolean isCopyPasteEnabled() {
-        return copyPasteDisabled;
+    public SecureTextArea() {
+        setCaret(scaret);
     }
 
-    public void setCopyPasteDisabled(boolean cpDisabled) {
-        this.copyPasteDisabled = cpDisabled;
+    private boolean copyPaste = false;
+
+    public boolean isCopyPasteEnabled() {
+        return copyPaste;
+    }
+
+    public void setCopyPaste(boolean cp) {
+        this.copyPaste = cp;
+        scaret.setSelectionEnabled(cp);
     }
 
     @Override
     public void copy() {
-        if (!copyPasteDisabled) {
+        if (copyPaste) {
             super.copy();
         }
     }
 
     @Override
     public void cut() {
-        if (!copyPasteDisabled) {
+        if (copyPaste) {
             super.cut();
         }
     }
 
     @Override
     public void paste() {
-        if (!copyPasteDisabled) {
+        if (copyPaste) {
             super.paste();
         }
     }
 
     @Override
     public void select(int selectionStart, int selectionEnd) {
-        if (!copyPasteDisabled) {
+        if (copyPaste) {
             super.select(selectionStart, selectionEnd);
         }
     }
 
     @Override
     public void selectAll() {
-        if (!copyPasteDisabled) {
+        if (copyPaste) {
             super.selectAll();
         }
     }

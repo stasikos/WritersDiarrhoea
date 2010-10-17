@@ -207,7 +207,7 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
             // Warn user about document
         }
         textArea.setEditable(true);
-        textArea.setCopyPasteDisabled(true);
+        textArea.setCopyPaste(false);
         textArea.getDocument().addDocumentListener(this);
         btStart.setEnabled(false);
         btSave.setEnabled(false);
@@ -217,7 +217,6 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         timer.start();
         progressBar.getModel().setMaximum(targetTime * 60);
         progressBar.getModel().setValue(0);
-        textArea.setCaret(new DisabledCaret());
         textArea.requestFocusInWindow();
     }//GEN-LAST:event_btStartActionPerformed
 
@@ -265,10 +264,9 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
     public void deadLineReached() {
         if (!targetReached) {
             textArea.setEditable(false);
-            textArea.setCopyPasteDisabled(false);
+            textArea.setCopyPaste(false);
         }
         textArea.getDocument().removeDocumentListener(this);
-        textArea.setCaret(new DefaultCaret());
         btStart.setEnabled(true);
         btSave.setEnabled(true);
     }
@@ -285,6 +283,18 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         checkTarget();
     }
 
+    private void disableTextLeaking() {
+        btSave.setEnabled(false);
+        textArea.setCopyPaste(false);
+        targetReached = false;
+    }
+
+    private void enableTextLeaking() {
+        btSave.setEnabled(true);
+        textArea.setCopyPaste(true);
+        targetReached = true;
+    }
+
     private void checkTarget() {
         try {
             String doc = textArea.getDocument().getText(0, textArea.getDocument().getLength());
@@ -292,13 +302,9 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
             lbCurrCount.setText(Integer.toString(currentCount));
             lbWordRamaining.setText(Integer.toString(targetWords - currentCount));
             if (targetWords - currentCount <= 0) {
-                btSave.setEnabled(true);
-                targetReached = true;
-                textArea.setCaret(new DefaultCaret());
+                enableTextLeaking();
             } else {
-                btSave.setEnabled(false);
-                targetReached = false;
-                textArea.setCaret(new DisabledCaret());
+                disableTextLeaking();
             }
         } catch (BadLocationException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);

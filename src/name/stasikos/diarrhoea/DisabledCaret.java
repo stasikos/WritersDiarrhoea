@@ -16,7 +16,6 @@
  */
 package name.stasikos.diarrhoea;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.text.DefaultCaret;
 
@@ -26,45 +25,62 @@ import javax.swing.text.DefaultCaret;
  */
 public class DisabledCaret extends DefaultCaret {
 
+    private boolean selectionEnabled = false;
+
+    public boolean isSelectionEnabled() {
+        return selectionEnabled;
+    }
+
+    public void setSelectionEnabled(boolean selectionEnabled) {
+        this.selectionEnabled = selectionEnabled;
+    }
+
     public DisabledCaret() {
         setVisible(true);
     }
 
     @Override
     public int getMark() {
+        if (selectionEnabled) {
+            return super.getMark();
+        }
         return super.getDot();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        //
+        if (selectionEnabled) {
+            super.mouseClicked(e);
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        // super.mouseMoved(e);
+        if (selectionEnabled) {
+            super.mouseMoved(e);
+        }
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        //
+        if (selectionEnabled) {
+            super.mouseDragged(e);
+        }
     }
-
-
 
     @Override
     public void mousePressed(MouseEvent e) {
-       positionCaret(e);
+        if (selectionEnabled) {
+            super.mousePressed(e);
+        } else {
+            positionCaret(e);
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        //super.mouseReleased(e);
+        if (selectionEnabled) {
+            super.mouseReleased(e);
+        }
     }
-
-    // ----
-
-
-
-
 }
