@@ -173,11 +173,13 @@ public class TargetsDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSuggestCountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSuggestCountActionPerformed
+        timeLimit = (Integer) spnLimit.getModel().getValue();
         wordLimit = timeLimit * WORDS_PER_MINUTE;
         spnWordCount.getModel().setValue(wordLimit);
     }//GEN-LAST:event_btSuggestCountActionPerformed
 
     private void btSuggestLimitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSuggestLimitActionPerformed
+        wordLimit = (Integer) spnWordCount.getModel().getValue();
         timeLimit = wordLimit / WORDS_PER_MINUTE;
         spnLimit.getModel().setValue(timeLimit);
     }//GEN-LAST:event_btSuggestLimitActionPerformed
