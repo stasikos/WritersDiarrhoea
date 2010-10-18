@@ -335,7 +335,7 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
     private void checkTarget() {
         try {
             String doc = textArea.getDocument().getText(0, textArea.getDocument().getLength());
-            currentCount = doc.split("\\W+").length;
+            currentCount = doc.split("\\s+").length;
             lbCurrCount.setText(Integer.toString(currentCount));
             lbWordRamaining.setText(Integer.toString(targetWords - currentCount));
             if (targetWords - currentCount <= 0) {
