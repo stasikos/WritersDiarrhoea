@@ -23,6 +23,7 @@
 package name.stasikos.diarrhoea;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -256,6 +257,7 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
     public static void main(String args[]) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.put("TextArea.font",new javax.swing.plaf.FontUIResource(new Font("monospaced",Font.PLAIN,12)));
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
