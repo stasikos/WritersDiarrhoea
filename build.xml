@@ -71,4 +71,25 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="unix-package" depends="clean,jar">
+        <copy file="scripts/wd.sh" todir="${dist.dir}" />
+        <copy file="README" todir="${dist.dir}" />
+        <tar longfile="gnu" destfile="${dist.dir}/../${ant.project.name}-${project.version}.tar.gz" compression="gzip"
+           basedir="${dist.dir}" excludes="README.TXT">
+
+<!--            <tarfileset dir="${dist.dir}/.">
+             <include name="${dist.dir}/lib/**" /> 
+                <include name="${dist.dir}/wd.sh" />
+                <include name="${dist.dir}/README" />
+                <include name="${dist.jar}" />
+            </tarfileset> -->
+        </tar>
+    </target>
+
+    <target name="windows-package" depends="clean, jar">
+        <copy file="README" todir="${dist.dir}" />
+        <zip basedir="${dist.dir}" excludes="README.TXT, wd.sh" destfile="${ant.project.name}-${project.version}.zip" />
+    </target>
+
+    <target name="package" depends="unix-package,windows-package"/>
 </project>
