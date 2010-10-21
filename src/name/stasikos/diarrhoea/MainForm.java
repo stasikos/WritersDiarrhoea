@@ -83,6 +83,7 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         toolBar = new javax.swing.JToolBar();
         btTargets = new javax.swing.JButton();
         btStart = new javax.swing.JButton();
+        btStop = new javax.swing.JButton();
         btSave = new javax.swing.JButton();
         statusBar = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -131,6 +132,19 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
             }
         });
         toolBar.add(btStart);
+
+        btStop.setText("Stop");
+        btStop.setEnabled(false);
+        btStop.setFocusable(false);
+        btStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btStop.setName("btStop"); // NOI18N
+        btStop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btStopActionPerformed(evt);
+            }
+        });
+        toolBar.add(btStop);
 
         btSave.setText("Save");
         btSave.setEnabled(false);
@@ -221,6 +235,8 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         textArea.getDocument().addDocumentListener(this);
         btStart.setEnabled(false);
         btSave.setEnabled(false);
+        btStop.setEnabled(true);
+        btTargets.setEnabled(false);
         timer = new WriterTimer(this, targetTime * 60);
         timerThread = new Thread(timer);
         timerThread.start();
@@ -251,13 +267,19 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
         }
     }//GEN-LAST:event_btSaveActionPerformed
 
+    private void btStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStopActionPerformed
+        timer.stop();
+        btStop.setEnabled(false);
+        deadLineReached();
+    }//GEN-LAST:event_btStopActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            UIManager.put("TextArea.font",new javax.swing.plaf.FontUIResource(new Font("monospaced",Font.PLAIN,12)));
+            UIManager.put("TextArea.font", new javax.swing.plaf.FontUIResource(new Font("monospaced", Font.PLAIN, 12)));
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -277,6 +299,7 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSave;
     private javax.swing.JButton btStart;
+    private javax.swing.JButton btStop;
     private javax.swing.JButton btTargets;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -305,9 +328,10 @@ public class MainForm extends javax.swing.JFrame implements TimedActionListener,
             }
         } else {
             textArea.getDocument().removeDocumentListener(this);
-            btStart.setEnabled(true);
             btSave.setEnabled(true);
         }
+        btStart.setEnabled(true);
+        btTargets.setEnabled(true);
     }
 
     public void insertUpdate(DocumentEvent e) {
