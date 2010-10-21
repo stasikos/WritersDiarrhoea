@@ -93,11 +93,20 @@
             </tarfileset>
 
         </tar>
+
+        <delete dir="./build/tar" />
     </target>
 
     <target name="windows-package" depends="clean, jar">
-        <copy file="README" todir="${dist.dir}" />
-        <zip basedir="${dist.dir}" excludes="README.TXT, wd.sh" destfile="${ant.project.name}-${project.version}.zip" />
+        <copy todir="./build/zip/${ant.project.name}-${project.version}">
+            <fileset dir="${dist.dir}">
+                <exclude name="README.TXT" />
+            </fileset>
+        </copy>
+
+        <copy file="README" todir="./build/zip/${ant.project.name}-${project.version}" />
+        <zip basedir="./build/zip" destfile="${ant.project.name}-${project.version}.zip" />
+        <delete dir="./build/zip" />
     </target>
 
     <target name="package" depends="unix-package,windows-package"/>
