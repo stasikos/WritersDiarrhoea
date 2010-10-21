@@ -9,3 +9,5 @@ It was created because of:
 Source code is supposed to be built with NetBeans & Oracle JRE 6, but you can
 also use Ant. It does not require any additional libs.
 
+To build just jarfile, run "jar" task from ant:
+$ ant jar   
