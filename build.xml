@@ -74,15 +74,23 @@
     <target name="unix-package" depends="clean,jar">
         <copy file="scripts/wd.sh" todir="${dist.dir}" />
         <copy file="README" todir="${dist.dir}" />
-        <tar longfile="gnu" destfile="${dist.dir}/../${ant.project.name}-${project.version}.tar.gz" compression="gzip"
-           basedir="${dist.dir}" excludes="README.TXT">
+        <chmod file="${dist.dir}/wd.sh" perm="755" />
 
-<!--            <tarfileset dir="${dist.dir}/.">
-             <include name="${dist.dir}/lib/**" /> 
-                <include name="${dist.dir}/wd.sh" />
-                <include name="${dist.dir}/README" />
-                <include name="${dist.jar}" />
-            </tarfileset> -->
+	<tar longfile="gnu"
+             destfile="${dist.dir}/../${ant.project.name}-${project.version}.tar.gz"
+             compression="gzip"
+             basedir="${dist.dir}"
+             excludes="README.TXT">
+
+             <tarfileset dir="${dist.dir}/.." filemode="755">
+                 <include name="${dist.dir}/wd.sh" />
+             </tarfileset>
+             <tarfileset dir="${dist.dir}/..">
+                 <include name="${dist.dir}/**" />
+                 <include name="${dist.jar}" />
+                 <exclude name="${dist.dir}/wd.sh" />
+             </tarfileset>
+
         </tar>
     </target>
 

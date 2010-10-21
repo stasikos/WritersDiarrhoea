@@ -49,6 +49,7 @@ public class WriterTimer implements Runnable {
                 }
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException ex) {
+                // It is not necessary to report this exception, but I will
                 Logger.getLogger(WriterTimer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
